@@ -1,2 +1,3 @@
 # tiny-track
-A minimalist, lightweight C++ experiment tracking library with Python bindings
+
+A minimalist, MLFlow-compatible, header-only C++ experiment tracking library with Python bindings.
