@@ -20,13 +20,14 @@ jobs:
 
       - name: Build release distributions
         run: |
+          # install build dependencies
+          python -m pip install --upgrade pip
+          python -m pip install build setuptools pybind11
 
           # build .so file
-          make build
+          make _build
 
           # build python package
-          python -m pip install --upgrade pip
-          python -m pip install build setuptools
           python -m build
 
       - name: Upload distributions
