@@ -13,3 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+#include <pybind11/pybind11.h>
+#include <string>
+
+#include "ttrack/local_logger.hpp"
+
+namespace py = pybind11;
+
+PYBIND11_MODULE(ttrack_cpp, m) {
+    py::class_<ttrack::LocalLogger>(m, "LocalLogger")
+        .def(py::init<const std::string&>(), py::arg("logging_dir"))
+        .def("log_param", &ttrack::LocalLogger::log_param, py::arg("key"), py::arg("value"))
+        .def("log_metric", &ttrack::LocalLogger::log_metric, py::arg("key"), py::arg("value"));
+}
