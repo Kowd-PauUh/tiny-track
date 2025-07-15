@@ -3,7 +3,7 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ttrack"
+name = "tiny-track"
 version = "0.0.1"
 description = "tiny-track: a minimalist, lightweight C++ experiment tracking library with Python bindings"
 readme = "README.md"
@@ -36,7 +36,7 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/Kowd-PauUh"
-Repository = "https://github.com/Kowd-PauUh/dbsod"
+Repository = "https://github.com/Kowd-PauUh/tiny-track"
 
 [tool.setuptools]
 packages = ["ttrack"]
