@@ -20,7 +20,7 @@ _build:
 	      -fPIC ttrack/bindings.cpp \
 		  -Iinclude -I/usr/include/uuid \
 		  $(shell python3 -m pybind11 --includes) \
-		  -o ttrack/ttrack.cpp.so
+		  -o ttrack/ttrack_cpp.so
 
 # activate .venv and build ttrack.cpp.so
 build:
