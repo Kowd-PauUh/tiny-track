@@ -1,0 +1,14 @@
+# c++
+*.so
+
+# python
+.venv/
+*.egg-info/
+*__pycache__/
+*.pytest_cache/
+
+# jupyter
+**.ipynb_checkpoints**
+
+# trash
+*.nfs*
