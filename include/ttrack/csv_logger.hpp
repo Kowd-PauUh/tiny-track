@@ -20,9 +20,9 @@
 
 namespace ttrack {
 
-class CSVLogger {
+class LocalLogger {
 public:
-    explicit CSVLogger(const std::string& logging_dir) : logging_dir(logging_dir) {};
+    explicit LocalLogger(const std::string& logging_dir) : logging_dir(logging_dir) {};
 
     inline void log_param(const std::string& key, const std::string& value);
 
@@ -32,11 +32,11 @@ private:
     std::string logging_dir;
 };
 
-inline void CSVLogger::log_param(const std::string& key, const std::string& value) {
+inline void LocalLogger::log_param(const std::string& key, const std::string& value) {
     return;  // TODO
 }
 
-inline void CSVLogger::log_metric(const std::string& key, double value) {
+inline void LocalLogger::log_metric(const std::string& key, double value) {
     return;  // TODO
 }
 
