@@ -108,7 +108,12 @@ void create_experiment(
  * - meta.yaml
  * - artifacts/ (empty)
  * - metrics/   (empty)
- * - tags/      (empty)
+ * - tags/
+ *   - mlflow.runName
+ *   - mlflow.source.git.commit
+ *   - mlflow.source.name
+ *   - mlflow.source.type
+ *   - mlflow.user
  * - params/    (empty)
  *
  * @param uuid Run UUID.
@@ -145,8 +150,7 @@ void create_run(
     // open file
     std::ofstream meta_file(meta_file_path);
     if (!meta_file) {
-        std::cerr << "Failed to create file: " << meta_file_path << std::endl;
-        return;
+        throw std::runtime_error("Failed to create file: " + meta_file_path);
     }
 
     // write metadata
