@@ -21,8 +21,40 @@
 #include <string>
 #include <ctime>
 #include <filesystem>
+#include <map>
 
 namespace ttrack {
+
+/**
+ * @brief Returns a map of experiment names to their UUIDs.
+ * @param logging_dir Logging dir where to search for experiments.
+ */
+std::map<std::string, std::string> get_experiments(const std::string& logging_dir) {
+    std::map<std::string, std::string> name_uuid_map;
+
+    // iterate over subdirectories (experiments) in logging dir
+    for (const auto& entry : std::filesystem::directory_iterator(logging_dir)) {
+        if (!entry.is_directory()) continue;
+
+        std::string uuid = entry.path().filename().string();
+        std::string meta_file_path = entry.path().string() + "/meta.yaml";
+
+        // open meta.yaml file
+        std::ifstream meta_file(meta_file_path);
+        if (!meta_file) continue;
+
+        // get experiment name
+        std::string line;
+        while (std::getline(meta_file, line)) {
+            if (line.rfind("name: ", 0) == 0) {
+                name_uuid_map[line.substr(6)] = uuid;
+                break;
+            }
+        }
+    }
+
+    return name_uuid_map;
+}
 
 /**
  * @brief Saves meta.yaml file under <logging_dir>/<uuid>.
