@@ -108,12 +108,7 @@ void create_experiment(
  * - meta.yaml
  * - artifacts/ (empty)
  * - metrics/   (empty)
- * - tags/
- *   - mlflow.runName
- *   - mlflow.source.git.commit
- *   - mlflow.source.name
- *   - mlflow.source.type
- *   - mlflow.user
+ * - tags/      (empty)
  * - params/    (empty)
  *
  * @param uuid Run UUID.
