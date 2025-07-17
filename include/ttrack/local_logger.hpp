@@ -17,6 +17,7 @@
 #pragma once
 
 #include <string>
+#include <ctime>
 
 #include "ttrack/utils.hpp"
 #include "ttrack/uuid.hpp"
@@ -73,7 +74,7 @@ public:
 
     inline void log_param(const std::string& key, const std::string& value);
 
-    inline void log_metric(const std::string& key, double value);
+    inline void log_metric(const std::string& key, double value, int step);
 
     inline void add_tag(const std::string& key, const std::string& value);
 
@@ -85,28 +86,47 @@ private:
     std::string run_name;
     std::string run_uuid;
     std::string run_dir;
+
+    inline void write_to_file(
+        const std::string& category,
+        const std::string& key,
+        const std::string& value,
+        std::ios_base::openmode mode
+    );
+
 };
 
-inline void LocalLogger::log_param(const std::string& key, const std::string& value) {
-    return;  // TODO
-}
-
-inline void LocalLogger::log_metric(const std::string& key, double value) {
-    return;  // TODO
-}
-
-inline void LocalLogger::add_tag(const std::string& key, const std::string& value) {
-    std::string tag_file_path = run_dir + "/tags/" + key;
+inline void LocalLogger::write_to_file(
+    const std::string& category,
+    const std::string& key,
+    const std::string& value,
+    std::ios_base::openmode mode
+) {
+    std::string file_path = run_dir + "/" + category + "/" + key;
 
     // open file
-    std::ofstream tag_file(tag_file_path);
-    if (!tag_file) {
-        throw std::runtime_error("Failed to create file: " + tag_file_path);
+    std::ofstream file(file_path, mode);
+    if (!file) {
+        throw std::runtime_error("Failed to open file: " + file_path);
     }
 
     // write to file
-    tag_file << value;
-    tag_file.close();
+    file << value;
+    file.close();
+}
+
+inline void LocalLogger::log_param(const std::string& key, const std::string& value) {
+    write_to_file(/*category=*/"params", /*key=*/key, /*value=*/value, /*mode=*/std::ios::out);
+}
+
+inline void LocalLogger::log_metric(const std::string& key, double value, int step) {
+    int now = static_cast<unsigned int>(time(nullptr));
+    std::string line = std::to_string(now) + "000 " + std::to_string(value) + " " + std::to_string(step) + "\n";
+    write_to_file(/*category=*/"metrics", /*key=*/key, /*value=*/line, /*mode=*/std::ios::app);
+}
+
+inline void LocalLogger::add_tag(const std::string& key, const std::string& value) {
+    write_to_file(/*category=*/"tags", /*key=*/key, /*value=*/value, /*mode=*/std::ios::out);
 }
 
 }  // ttrack namespace
