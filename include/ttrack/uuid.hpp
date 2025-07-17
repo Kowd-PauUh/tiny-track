@@ -18,10 +18,18 @@
 
 #include <cstdlib>
 #include <string>
+#include <ctime>
 
 namespace ttrack {
 
 std::string uuid_v4() {
+    // seed rand
+    static bool seeded = false;
+    if (!seeded) {
+        srand(static_cast<unsigned int>(time(nullptr)));
+        seeded = true;
+    }
+
     static const char* hex_chars = "0123456789abcdef";
     char uuid[37];
 
