@@ -62,7 +62,10 @@ std::map<std::string, std::string> get_experiments(const std::string& logging_di
 }
 
 /**
- * @brief Saves meta.yaml file under <logging_dir>/<uuid>.
+ * @brief Sets up experiment directory.
+ *
+ * Under <logging_dir>/<uuid> creates meta.yaml .
+ *
  * @param uuid Experiment UUID.
  * @param experiment_name Experiment name to appear in meta.yaml.
  * @param logging_dir Logging dir where to create an experiment.
@@ -89,11 +92,79 @@ void create_experiment(
 
     // write metadata
     meta_file << "artifact_location: mlflow-artifacts:/" << uuid << "\n";
-    meta_file << "creation_time: " << now << "\n";
+    meta_file << "creation_time: " << now << "000\n";
     meta_file << "experiment_id: '" << uuid << "'\n";
-    meta_file << "last_update_time: " << now << "\n";
+    meta_file << "last_update_time: " << now << "000\n";
     meta_file << "lifecycle_stage: active\n";
     meta_file << "name: " << experiment_name << "\n";
+
+    meta_file.close();
+}
+
+/**
+ * @brief Sets up run directory.
+ *
+ * Under <logging_dir>/<experiment_uuid>/<uuid> creates:
+ * - meta.yaml
+ * - artifacts/ (empty)
+ * - metrics/   (empty)
+ * - tags/      (empty)
+ * - params/    (empty)
+ *
+ * @param uuid Run UUID.
+ * @param run_name Run name to appear in meta.yaml.
+ * @param experiment_uuid Experiment name to appear in meta.yaml.
+ * @param logging_dir Logging dir where to create an experiment.
+ */
+void create_run(
+    const std::string& uuid,
+    const std::string& run_name,
+    const std::string& experiment_uuid,
+    const std::string& logging_dir
+) {
+    std::string experiment_dir = logging_dir + "/" + experiment_uuid;
+    std::string run_dir = experiment_dir + "/" + uuid;
+
+    // check if experiment dir exists and is directory
+    if (!std::filesystem::exists(experiment_dir) || !std::filesystem::is_directory(experiment_dir)) {
+        throw std::runtime_error("Failed to create run: \"" + run_name + "\". Check if \"" +
+                                 logging_dir + "/" + experiment_uuid + "\" exists and is a directory.");
+    }
+
+    // create dirs
+    std::filesystem::create_directories(run_dir);
+    std::filesystem::create_directories(run_dir + "/artifacts");
+    std::filesystem::create_directories(run_dir + "/metrics");
+    std::filesystem::create_directories(run_dir + "/tags");
+    std::filesystem::create_directories(run_dir + "/params");
+
+    std::string meta_file_path = run_dir + "/meta.yaml";
+
+    int now = static_cast<unsigned int>(time(nullptr));
+
+    // open file
+    std::ofstream meta_file(meta_file_path);
+    if (!meta_file) {
+        std::cerr << "Failed to create file: " << meta_file_path << std::endl;
+        return;
+    }
+
+    // write metadata
+    meta_file << "artifact_uri: mlflow-artifacts:/" << experiment_uuid << "/" << uuid << "/artifacts" << "\n";
+    meta_file << "end_time: " << now << "000\n";
+    meta_file << "entry_point_name: ''\n";
+    meta_file << "experiment_id: '" << experiment_uuid << "'\n";
+    meta_file << "lifecycle_stage: active\n";
+    meta_file << "run_id: " << uuid << "\n";
+    meta_file << "run_name: " << run_name << "\n";
+    meta_file << "run_uuid: " << uuid << "\n";
+    meta_file << "source_name: ''\n";
+    meta_file << "source_type: 4\n";
+    meta_file << "source_version: ''\n";
+    meta_file << "start_time: " << now << "000\n";
+    meta_file << "status: 3\n";
+    meta_file << "tags: []\n";
+    meta_file << "user_id: cpp\n";
 
     meta_file.close();
 }
