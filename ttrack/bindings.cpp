@@ -27,7 +27,8 @@ namespace py = pybind11;
 PYBIND11_MODULE(ttrack_cpp, m) {
     // local logger
     py::class_<ttrack::LocalLogger>(m, "LocalLogger")
-        .def(py::init<const std::string&>(), py::arg("logging_dir"))
+        .def(py::init<const std::string&, const std::string&, const std::string&>(),
+             py::arg("logging_dir"), py::arg("experiment_name"), py::arg("run_name"))
         .def("log_param", &ttrack::LocalLogger::log_param, py::arg("key"), py::arg("value"))
         .def("log_metric", &ttrack::LocalLogger::log_metric, py::arg("key"), py::arg("value"));
 
