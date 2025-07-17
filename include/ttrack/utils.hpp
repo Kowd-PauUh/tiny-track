@@ -30,7 +30,7 @@ namespace ttrack {
  * @param logging_dir Logging dir where to search for experiments.
  */
 std::map<std::string, std::string> get_experiments(const std::string& logging_dir) {
-    std::map<std::string, std::string> name_uuid_map;
+    std::map<std::string, std::string> uuid_name_map;
 
     // iterate over subdirectories (experiments) in logging dir
     for (const auto& entry : std::filesystem::directory_iterator(logging_dir)) {
@@ -47,13 +47,13 @@ std::map<std::string, std::string> get_experiments(const std::string& logging_di
         std::string line;
         while (std::getline(meta_file, line)) {
             if (line.rfind("name: ", 0) == 0) {
-                name_uuid_map[uuid] = line.substr(6);
+                uuid_name_map[uuid] = line.substr(6);
                 break;
             }
         }
     }
 
-    return name_uuid_map;
+    return uuid_name_map;
 }
 
 /**
