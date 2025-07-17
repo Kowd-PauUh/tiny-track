@@ -32,9 +32,6 @@ PYBIND11_MODULE(ttrack_cpp, m) {
         .def("log_param", &ttrack::LocalLogger::log_param, py::arg("key"), py::arg("value"))
         .def("log_metric", &ttrack::LocalLogger::log_metric, py::arg("key"), py::arg("value"));
 
-    // uuid
-    m.def("uuid_v4", &ttrack::uuid_v4);
-
     // utils
     m.def("get_experiments", &ttrack::get_experiments);
 }
