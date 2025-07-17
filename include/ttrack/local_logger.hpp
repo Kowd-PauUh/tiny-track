@@ -96,6 +96,18 @@ private:
 
 };
 
+/**
+ * @brief Writes a key-value pair to a specific file in the run directory.
+ *
+ * This method constructs the full path as:
+ * <run_dir>/<category>/<key>
+ * and writes the value using the provided I/O mode.
+ *
+ * @param category Subdirectory name (e.g., "params", "metrics", "tags").
+ * @param key File name within the category directory.
+ * @param value Content to write into the file.
+ * @param mode File open mode (e.g., std::ios::out or std::ios::app).
+ */
 inline void LocalLogger::write_to_file(
     const std::string& category,
     const std::string& key,
@@ -115,16 +127,48 @@ inline void LocalLogger::write_to_file(
     file.close();
 }
 
+/**
+ * @brief Logs a parameter as a key-value pair.
+ *
+ * Writes the parameter to the file:
+ * <run_dir>/params/<key>
+ * Overwrites if already exists.
+ *
+ * @param key Name of the parameter.
+ * @param value Value of the parameter.
+ */
 inline void LocalLogger::log_param(const std::string& key, const std::string& value) {
     write_to_file(/*category=*/"params", /*key=*/key, /*value=*/value, /*mode=*/std::ios::out);
 }
 
+/**
+ * @brief Logs a metric value with timestamp and step.
+ *
+ * Appends a line in the format:
+ * <timestamp(ms)> <value> <step>\n
+ * to the file:
+ * <run_dir>/metrics/<key>
+ *
+ * @param key Name of the metric.
+ * @param value Metric value.
+ * @param step Step index (e.g., epoch or iteration).
+ */
 inline void LocalLogger::log_metric(const std::string& key, double value, int step) {
     int now = static_cast<unsigned int>(time(nullptr));
     std::string line = std::to_string(now) + "000 " + std::to_string(value) + " " + std::to_string(step) + "\n";
     write_to_file(/*category=*/"metrics", /*key=*/key, /*value=*/line, /*mode=*/std::ios::app);
 }
 
+/**
+ * @brief Adds a tag to the current run.
+ *
+ * Writes the tag value to:
+ * <run_dir>/tags/<key>
+ * Overwrites if already exists.
+ *
+ * @param key Name of the tag.
+ * @param value Value of the tag.
+ */
 inline void LocalLogger::add_tag(const std::string& key, const std::string& value) {
     write_to_file(/*category=*/"tags", /*key=*/key, /*value=*/value, /*mode=*/std::ios::out);
 }
