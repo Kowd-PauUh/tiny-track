@@ -36,6 +36,6 @@ PYBIND11_MODULE(ttrack_cpp, m) {
     m.def("uuid_v4", &ttrack::uuid_v4);
 
     // utils
-    m.def("save_experiment_metadata", &ttrack::save_experiment_metadata);
+    m.def("create_experiment", &ttrack::create_experiment);
     m.def("get_experiments", &ttrack::get_experiments);
 }

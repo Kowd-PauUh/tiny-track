@@ -51,7 +51,7 @@ public:
 
         // create experiment if not exists
         if (!exists) {
-            save_experiment_metadata(/*uuid=*/uuid, /*experiment_name=*/experiment_name, /*logging_dir=*/logging_dir);
+            create_experiment(/*uuid=*/uuid, /*experiment_name=*/experiment_name, /*logging_dir=*/logging_dir);
         }
         
         experiment_uuid = uuid;

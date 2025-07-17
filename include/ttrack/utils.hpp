@@ -62,7 +62,7 @@ std::map<std::string, std::string> get_experiments(const std::string& logging_di
  * @param experiment_name Experiment name to appear in meta.yaml.
  * @param logging_dir Logging dir where to create an experiment.
  */
-void save_experiment_metadata(
+void create_experiment(
     const std::string& uuid,
     const std::string& experiment_name,
     const std::string& logging_dir
