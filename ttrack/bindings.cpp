@@ -30,7 +30,8 @@ PYBIND11_MODULE(ttrack_cpp, m) {
         .def(py::init<const std::string&, const std::string&, const std::string&, const std::string&>(),
              py::arg("logging_dir"), py::arg("experiment_name"), py::arg("run_name"), py::arg("source"))
         .def("log_param", &ttrack::LocalLogger::log_param, py::arg("key"), py::arg("value"))
-        .def("log_metric", &ttrack::LocalLogger::log_metric, py::arg("key"), py::arg("value"));
+        .def("log_metric", &ttrack::LocalLogger::log_metric, py::arg("key"), py::arg("value"), py::arg("step"))
+        .def("add_tag", &ttrack::LocalLogger::add_tag, py::arg("key"), py::arg("value"));
 
     // utils
     m.def("get_experiments", &ttrack::get_experiments);
