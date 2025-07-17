@@ -40,11 +40,18 @@ public:
         std::string uuid = ttrack::uuid_v4();
 
         // get experiment uuid by name if exists
+        bool exists = false;
         for (const auto& pair : uuid_name_map) {
             if (experiment_name == pair.second) {
                 uuid = pair.first;
+                exists = true;
                 break;
             }
+        }
+
+        // create experiment if not exists
+        if (!exists) {
+            save_experiment_metadata(/*uuid=*/uuid, /*experiment_name=*/experiment_name, /*logging_dir=*/logging_dir);
         }
         
         experiment_uuid = uuid;
