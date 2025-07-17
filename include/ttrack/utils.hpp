@@ -32,6 +32,11 @@ namespace ttrack {
 std::map<std::string, std::string> get_experiments(const std::string& logging_dir) {
     std::map<std::string, std::string> uuid_name_map;
 
+    // return empty map if logging dir does not exist yet
+    if (!std::filesystem::exists(logging_dir)) {
+        return uuid_name_map;
+    }
+
     // iterate over subdirectories (experiments) in logging dir
     for (const auto& entry : std::filesystem::directory_iterator(logging_dir)) {
         if (!entry.is_directory()) continue;
