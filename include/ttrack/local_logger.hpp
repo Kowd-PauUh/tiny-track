@@ -18,11 +18,37 @@
 
 #include <string>
 
+#include "ttrack/utils.hpp"
+#include "ttrack/uuid.hpp"
+
 namespace ttrack {
 
 class LocalLogger {
 public:
-    explicit LocalLogger(const std::string& logging_dir) : logging_dir(logging_dir) {};
+    explicit LocalLogger(
+        const std::string& logging_dir,
+        const std::string& experiment_name,
+        const std::string& run_name
+    ) : logging_dir(logging_dir),
+        experiment_name(experiment_name),
+        run_name(run_name)
+    {
+        // get existing experiments
+        std::map<std::string, std::string> uuid_name_map = ttrack::get_experiments(logging_dir);
+
+        // prepare new uuid in case experiment doesn't exist
+        std::string uuid = ttrack::uuid_v4();
+
+        // get experiment uuid by name if exists
+        for (const auto& pair : uuid_name_map) {
+            if (experiment_name == pair.second) {
+                uuid = pair.first;
+                break;
+            }
+        }
+        
+        experiment_uuid = uuid;
+    }
 
     inline void log_param(const std::string& key, const std::string& value);
 
@@ -30,6 +56,9 @@ public:
 
 private:
     std::string logging_dir;
+    std::string experiment_name;
+    std::string experiment_uuid;
+    std::string run_name;
 };
 
 inline void LocalLogger::log_param(const std::string& key, const std::string& value) {
