@@ -15,17 +15,26 @@
  */
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <string>
 
 #include "ttrack/local_logger.hpp"
+#include "ttrack/utils.hpp"
 #include "ttrack/uuid.hpp"
 
 namespace py = pybind11;
 
 PYBIND11_MODULE(ttrack_cpp, m) {
+    // local logger
     py::class_<ttrack::LocalLogger>(m, "LocalLogger")
         .def(py::init<const std::string&>(), py::arg("logging_dir"))
         .def("log_param", &ttrack::LocalLogger::log_param, py::arg("key"), py::arg("value"))
         .def("log_metric", &ttrack::LocalLogger::log_metric, py::arg("key"), py::arg("value"));
+
+    // uuid
     m.def("uuid_v4", &ttrack::uuid_v4);
+
+    // utils
+    m.def("save_experiment_metadata", &ttrack::save_experiment_metadata);
+    m.def("get_experiments", &ttrack::get_experiments);
 }
