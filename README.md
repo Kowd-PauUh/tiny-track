@@ -2,6 +2,47 @@
 
 A minimalist, MLFlow-compatible, header-only C++ experiment tracking library with Python bindings.
 
+## C++
+
+### Usage
+
+```c++
+#include <string>
+#include <iostream>
+
+#include "ttrack/local_logger.hpp"
+#include "ttrack/utils.hpp"
+
+int main() {
+    // start run
+    ttrack::LocalLogger logger(
+        /*logging_dir=*/"mlruns",  // default logging dir used by mlflow is "mlruns"
+        /*experiment_name=*/"My experiment name",
+        /*run_name=*/"My run name",
+        /*source=*/std::string(__FILE__)
+    );
+
+    // add tags
+    logger.add_tag(/*key=*/"myTagName", /*value=*/"myTagValue");
+
+    // add params
+    logger.log_param(/*key=*/"myParamName", /*value=*/"myParamValue");
+
+    // log metrics
+    for (int i = 0; i < 10; ++i) {
+        logger.log_metric(/*key=*/"myMetric", /*value=*/i*i, /*step=*/i+1);
+    }
+
+    // print existing experiments
+    auto experiments = ttrack::get_experiments(/*logging_dir=*/"mlruns");
+    for (const auto& [experiment_uuid, experiment_name] : experiments) {
+        std::cout << "'" << experiment_uuid << "': '" << experiment_name << "'" << std::endl;
+    }
+
+    return 0;
+}
+```
+
 ## Python
 
 ### Prerequisites
