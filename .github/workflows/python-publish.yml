@@ -31,7 +31,7 @@ jobs:
           make _build
 
           # build python package
-          python -m build
+          python -m build --wheel
 
       - name: Upload distributions
         uses: actions/upload-artifact@v4
