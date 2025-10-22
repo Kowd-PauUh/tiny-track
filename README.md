@@ -2,8 +2,43 @@
 
 A minimalist, MLFlow-compatible, header-only C++ experiment tracking library with Python bindings.
 
+## Python
 
-## Usage
+### Prerequisites
+
+- Linux (Ubuntu/Debian tested)
+- Python 3.10, 3.11 or 3.12
+
+### Installation
+
+Install latest release from PyPI:
+
+```sh
+pip install -U tiny-track
+```
+
+Or build from source:
+
+```sh
+# clone the repository
+git clone https://github.com/Kowd-PauUh/tiny-track.git
+cd tiny-track
+
+# install make
+sudo apt-get update && sudo apt-get install -y make
+
+# setup .venv
+make venv
+
+# build .so files
+make install_g++
+make build
+
+# activate .venv
+source .venv/bin/activate
+```
+
+### Usage
 
 Logging via Python API:
 
