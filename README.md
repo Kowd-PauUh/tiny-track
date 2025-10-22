@@ -107,3 +107,7 @@ for i in range(10):
 # print existing experiments
 print(get_experiments(logging_dir='mlruns'))
 ```
+
+## Limitations
+
+- The UUID generator for runs and experiments (`ttrack::uuid_v4` in `include/ttrack/uuid.hpp`) uses a simple implementation that seeds `rand()` with the current time in seconds. Although this is sufficient for most ML experiment tracking purposes, it **results in one experiment or run overwriting other if both were created within the same second.**
