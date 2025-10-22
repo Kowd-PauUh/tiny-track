@@ -21,17 +21,25 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install patchelf
+        run: sudo apt-get update && sudo apt-get install -y patchelf
+
       - name: Build release distributions
         run: |
           # install build dependencies
           python -m pip install --upgrade pip
-          python -m pip install build setuptools pybind11
+          python -m pip install build setuptools pybind11 auditwheel
 
           # build .so file
           make _build
 
           # build python package
           python -m build --wheel
+
+          # repair wheel
+          wheel=$(ls dist/*.whl)
+          auditwheel repair "$wheel" -w dist/
+          rm "$wheel"
 
       - name: Upload distributions
         uses: actions/upload-artifact@v4
