@@ -47,9 +47,9 @@ from ttrack.ttrack_cpp import LocalLogger, get_experiments
 
 # start run
 logger = LocalLogger(
-    logging_dir='mlruns',                  # set your logging dir name (default used by mlflow is "mlruns")
-    experiment_name='My experiment name',  # set your experiment name
-    run_name='My run name',                # set your run name
+    logging_dir='mlruns',  # default logging dir used by mlflow is "mlruns"
+    experiment_name='My experiment name',
+    run_name='My run name',
     source=__file__,
 )
 
@@ -62,4 +62,7 @@ logger.log_param(key='myParamName', value='myParamValue')
 # log metrics
 for i in range(10):
     logger.log_metric(key='myMetric', value=i**2, step=i+1)
+
+# print existing experiments
+print(get_experiments(logging_dir='mlruns'))
 ```
